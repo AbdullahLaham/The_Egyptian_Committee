@@ -178,6 +178,9 @@ export const getCampaignCandidates = async ({
     },
   });
 
+
+  console.log("rrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrr", response.data.candidates)
+
   return response.data.candidates;
 };
 

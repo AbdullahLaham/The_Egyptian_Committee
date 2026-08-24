@@ -1,6 +1,6 @@
 {
   "expo": {
-    "name": "اللجنه المصريه",
+    "name": "اللجنة المصرية",
     "slug": "maser",
     "version": "1.0.0",
     "orientation": "portrait",
@@ -41,7 +41,9 @@
           }
         }
       ],
-      "expo-secure-store"
+      "expo-secure-store",
+      "expo-sqlite",
+      "expo-notifications"
     ],
     "experiments": {
       "typedRoutes": true,

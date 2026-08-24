@@ -35,109 +35,17 @@ import {
   CANDIDATE_STATUS,
   toggleStatus,
 } from "@/constants/candidateStatus";
+import { DrawerActions, useNavigation } from "@react-navigation/native";
+import HomeHeader from "@/components/home/HomeHeader";
+import Campaigns from "@/app/campaigns";
 export default function HomeScreen() {
+
+  const navigation = useNavigation();
+
+
   const [search, setSearch] =
     useState("");
 
-  const [campaignState, setCampaignState] =
-    useState({
-      campaigns: [],
-      selectedCampaign: null,
-      loading: false,
-      error: null,
-    });
-
-  /* ================= CANDIDATES ================= */
-
-  const [candidates, setCandidates] =
-    useState<any[]>([]);
-
-  const [candidatesLoading, setCandidatesLoading] =
-    useState(false);
-
-  const [candidatesPage, setCandidatesPage] =
-    useState(1);
-
-  const [hasMoreCandidates, setHasMoreCandidates] =
-    useState(true);
-
-  const [totalCandidates, setTotalCandidates] =
-    useState(0);
-
-  /* ================= MODAL ================= */
-
-  const [
-    selectedCandidate,
-    setSelectedCandidate,
-  ] = useState<any>(null);
-
-  const [
-    deliveryModalVisible,
-    setDeliveryModalVisible,
-  ] = useState(false);
-
-  const [
-    updatingCandidate,
-    setUpdatingCandidate,
-  ] = useState(false);
-
-  /* ================= SEARCH ================= */
-
-  const [debouncedSearch] =
-    useDebounce(search, 2000); // search
-
-  /* ================= FETCH CANDIDATES ================= */
-
-  const fetchCandidates = async ({
-    page = 1,
-    reset = false,
-    query = "",
-  }: any) => {
-    try {
-      if (
-        !campaignState.selectedCampaign
-      )
-        return;
-
-      setCandidatesLoading(true);
-
-      const response =
-        await getCampaignCandidates({
-          page,
-          campaignId:
-            campaignState.selectedCampaign?.id,
-          search: query,
-        });
-
-      const newData =
-        response?.data || [];
-
-      setCandidates((prev) =>
-        reset
-          ? newData
-          : [...prev, ...newData]
-      );
-
-      setHasMoreCandidates(
-        response.current_page <
-        response.last_page
-      );
-
-      setCandidatesPage(
-        response.current_page
-      );
-
-      setTotalCandidates(
-        response.total
-      );
-    } catch (error) {
-      console.log(error);
-    } finally {
-      setCandidatesLoading(false);
-    }
-  };
-
-  /* ================= UPDATE STATUS ================= */
 
   // const handleDeliverCandidate =
   //   async () => {
@@ -189,8 +97,6 @@ export default function HomeScreen() {
   //     }
   //   };
 
-
-
   //   const handleDeliverCandidate = async () => {
   //   try {
   //     if (!selectedCandidate) return;
@@ -227,139 +133,39 @@ export default function HomeScreen() {
   // };
 
 
-  const handleDeliverCandidate =
-    async (image: any) => {
-      try {
-        if (!selectedCandidate)
-          return;
-
-        setUpdatingCandidate(true);
-
-        const nextStatus =
-          selectedCandidate.status ===
-            "مستلم"
-            ? "مرشح"
-            : "مستلم";
-
-        // const formData =
-        //   new FormData();
-
-        // formData.append(
-        //   "status",
-        //   nextStatus
-        // );
-
-        /* OPTIONAL IMAGE */
-
-        // if (
-        //   image?.uri &&
-        //   selectedCandidate.status ===
-        //     "مستلم"
-        // ) {
-
-        //   console.log("Appending image to form data:", {
-        //     image: {
-        //       uri: image.uri,
-        //       name: "candidate-id.jpg",
-        //       type: "image/jpeg",
-        //     },
-        //   });
-
-        //   formData.append(
-        //     "img",
-        //     {
-        //       uri: image.uri,
-        //       name:
-        //         "candidate-id.jpg",
-        //       type: "image/jpeg",
-        //     } as any
-        //   );
-        // }
-
-        const res = await updateCandidateStatus({
-          candidateId:
-            selectedCandidate.id,
-
-          status: nextStatus,
-
-          // image,
-        });
-
-        /* UPDATE CANDIDATES */
-
-        setCandidates((prev) =>
-          prev.map((item) =>
-            item.id ===
-              selectedCandidate.id
-              ? {
-                ...item,
-                status: nextStatus,
-              }
-              : item
-          )
-        );
-
-        /* UPDATE MODAL */
-
-        setSelectedCandidate(
-          (prev: any) => ({
-            ...prev,
-            status: nextStatus,
-          })
-        );
-
-        return res;
-      } catch (error) {
-        console.log(error);
-      } finally {
-        setUpdatingCandidate(false);
-      }
-    };
 
   /* ================= LOAD MORE ================= */
 
-  const loadMoreCandidates = () => {
-    if (
-      candidatesLoading ||
-      !hasMoreCandidates
-    )
-      return;
-
-    fetchCandidates({
-      page: candidatesPage + 1,
-      query: debouncedSearch,
-    });
-  };
 
   /* ================= EFFECTS ================= */
 
-  useEffect(() => {
-    fetchCampaigns(setCampaignState);
+  // useEffect(() => {
+  //   fetchCampaigns(setCampaignState);
 
-    loadSelectedCampaign(
-      setCampaignState
-    );
-  }, []);
+  //   loadSelectedCampaign(
+  //     setCampaignState
+  //   );
+  // }, []);
 
-  useEffect(() => {
-    if (
-      !campaignState.selectedCampaign
-    )
-      return;
+  // useEffect(() => {
+  //   if (
+  //     !campaignState.selectedCampaign
+  //   )
+  //     return;
 
-    setCandidates([]);
+  //   setCandidates([]);
 
-    setCandidatesPage(1);
+  //   setCandidatesPage(1);
 
-    fetchCandidates({
-      page: 1,
-      reset: true,
-      query: debouncedSearch,
-    });
-  }, [
-    campaignState.selectedCampaign,
-    debouncedSearch,
-  ]);
+  //   fetchCandidates({
+  //     page: 1,
+  //     reset: true,
+  //     query: debouncedSearch,
+  //   });
+  // }, [
+  //   campaignState.selectedCampaign,
+  //   debouncedSearch,
+  // ]);
 
   return (
     <View className="flex-1 bg-brand-secondary">
@@ -381,8 +187,10 @@ export default function HomeScreen() {
       >
         {/* HEADER */}
 
+        <HomeHeader />
+
         <View className="px-5 pt-16">
-          <View className="flex-row items-center justify-between">
+          {/* <View className="flex-row items-center justify-between">
             <View className="flex-1">
               <Text className="text-gray-300 text-lg">
                 👋 مرحباً بك
@@ -424,12 +232,12 @@ export default function HomeScreen() {
                 resizeMode="contain"
               />
             </View>
-          </View>
+          </View> */}
         </View>
 
         {/* SEARCH */}
 
-        <View className="px-5 mt-8">
+        {/* <View className="px-5 mt-8">
           <View className="rounded-[32px] border border-brand-white/10 bg-brand-white/5 px-5 py-5 shadow-brand">
 
             <Text className="text-gray-300 text-base mb-4 font-bold">
@@ -457,11 +265,11 @@ export default function HomeScreen() {
               )}
             </View>
           </View>
-        </View>
+        </View> */}
 
         {/* CAMPAIGNS */}
 
-        <View className="mt-8">
+        {/* <View className="mt-8">
           <View className="px-5 mb-5">
             <Text className="text-brand-white text-2xl font-extrabold">
               الحملات المتوفرة
@@ -521,11 +329,14 @@ export default function HomeScreen() {
               }
             )}
           </ScrollView>
-        </View>
+        </View> */}
+        {/* <Campaigns campaignState={campaignState} selectCampaign={selectCampaign} setCampaignState={setCampaignState} /> */}
+
+
 
         {/* CANDIDATES */}
 
-        <CandidatesSection
+        {/* <CandidatesSection
           candidates={candidates}
           loading={candidatesLoading}
           hasMore={hasMoreCandidates}
@@ -549,12 +360,12 @@ export default function HomeScreen() {
               true
             );
           }}
-        />
+        /> */}
       </ScrollView>
 
       {/* MODAL */}
 
-      <CandidateDeliveryModal
+      {/* <CandidateDeliveryModal
         visible={deliveryModalVisible}
         candidate={selectedCandidate}
         loading={updatingCandidate}
@@ -570,7 +381,7 @@ export default function HomeScreen() {
         onConfirm={
           handleDeliverCandidate
         }
-      />
+      /> */}
     </View>
   );
 }
