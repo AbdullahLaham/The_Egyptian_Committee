@@ -18,7 +18,7 @@ const OTPModal = ({
   otpModal,
   setOtpModal,
   inputsRef,
-  phoneNumber
+  identification,
 }: any) => {
   const [otp, setOtp] = useState(["", "", "", "", "", ""]);
   const [loading, setLoading] = useState(false);
@@ -54,18 +54,20 @@ const OTPModal = ({
       setError(null);
 
       // router.replace("/(tabs)/home");
+      console.log("yyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyy")
 
       const res = await axios.post(
-        "https://egypt.mahmoudalbatran.com/api/login/verify",
+        "https://egypt.mahmoudalbatran.com/api/v1/employee/verify",
         {
-         email: phoneNumber,
+         identification: identification,
           login_code: code,
         }
       );
       if (res?.data) {
         // ✅ SUCCESS
         console.log(res?.data, 'uuuuuuuuuuuuuuuuuuuuu');
-        await saveToken(res?.data);
+        await saveToken(res?.data?.token);
+        await saveUser(res?.data?.employee);
          
       setOtpModal(false);
       router.replace("/home");
@@ -89,8 +91,8 @@ const OTPModal = ({
       setError(null);
 
       await axios.post(
-        "https://egypt.mahmoudalbatran.com/api/login",
-        { email: phoneNumber}
+        "https://egypt.mahmoudalbatran.com/api/v1/employee/login",
+        { identification: identification}
       );
 
       setOtp(["", "", "", "", "", ""]);
@@ -118,9 +120,9 @@ const OTPModal = ({
               <Text className="text-center text-gray-500 mt-2">
                 تم إرسال رمز مكوّن من 6 أرقام الى  رقم الهاتف الخاص بك
               </Text>
-              <Text className="text-center text-gray-500 mt-2">
-                {phoneNumber}
-              </Text>
+              {/* <Text className="text-center text-gray-500 mt-2">
+                {identification}
+              </Text> */}
 
               {/* OTP INPUTS */}
               <View

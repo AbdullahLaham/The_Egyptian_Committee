@@ -17,7 +17,9 @@ export const checkAuth = async () => {
       }
     );
 
-    console.log(res.data, 'check auth response');
+    console.log(token, 'check auth response');
+
+    
     // console.log('uuuuuuuuuuuuuuuuuuuuuuuuuuuuu', res.data)
     // ✅ خزّن المستخدم في Zustand
     useUserStore.getState().setUser(res.data); // لأننا خارج React Component

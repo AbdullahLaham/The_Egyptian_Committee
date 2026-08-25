@@ -25,6 +25,8 @@ export default function LoginScreen() {
 
   const [phonePrefix, setPhonePrefix] = useState("970");
   const [phoneNumber, setPhoneNumber] = useState("");
+
+  const [identification, setIdentification] = useState("");
   const [password, setPassword] = useState("");
   const [timer, setTimer] = useState(60);
 
@@ -38,7 +40,7 @@ export default function LoginScreen() {
 const submitLogin = async () => {
   setError(null);
 
-  if (!phoneNumber || !password) {
+  if (!identification || !password) {
     return setError("جميع الحقول مطلوبة");
   }
 
@@ -46,17 +48,16 @@ const submitLogin = async () => {
   //   return setError("رقم الهاتف يجب أن يكون 9 أرقام");
   // }
 
-  const fullPhoneNumber = `${phoneNumber}`;
 
   try {
     setLoading(true);
 
     const res = await axios.post(
-      "https://egypt.mahmoudalbatran.com/api/login",
+      "https://egypt.mahmoudalbatran.com/api/v1/employee/login",
       
       {
-        email: fullPhoneNumber,
-        password,
+        identification: identification,
+        password: password,
       },
       {
         headers: {
@@ -145,10 +146,10 @@ const submitLogin = async () => {
 
               <View className="flex-row gap-2">
                 <TextInput
-                  placeholder="email-address@domain.com"
-                  value={phoneNumber}
-                  onChangeText={setPhoneNumber}
-                  keyboardType="email-address"
+                  placeholder="*******40"
+                  value={identification}
+                  onChangeText={setIdentification}
+                  keyboardType="number-pad"
                   placeholderTextColor="#9CA3AF"
                   className="flex-1 border border-gray-200 rounded-2xl px-5 py-4 text-brand-dark text-base bg-gray-50"
                 />
@@ -248,7 +249,7 @@ const submitLogin = async () => {
           setOtpModal={setOtpModal}
           otp={otp}
           setOtp={setOtp}
-          phoneNumber={`${phoneNumber}`}
+          identification={`${identification}`}
           password={password}
           timer={timer}
         />
