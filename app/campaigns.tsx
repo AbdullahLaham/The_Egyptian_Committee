@@ -587,7 +587,7 @@ const Campaigns = () => {
   }, [campaignState.selectedCampaign]);
 
   return (
-    <View className="flex-1 bg-gray-50 dark:bg-[#0F0F0F]">
+    <SafeAreaView className="flex-1 bg-gray-50 dark:bg-[#0F0F0F]">
       <StatusBar barStyle={colorScheme === "dark" ? "light-content" : "dark-content"} />
 
       {/* ScreenHeader الموحد للثيم والتنقل */}
@@ -678,7 +678,7 @@ const Campaigns = () => {
         }}
         onConfirm={handleDeliverCandidate}
       />
-    </View>
+    </SafeAreaView>
   );
 };
 

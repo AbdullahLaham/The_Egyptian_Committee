@@ -88,6 +88,7 @@ import ScreenHeader from "@/components/ScreenHeader";
 import { useTheme } from "@/context/ThemeContext";
 import axios from "axios";
 import { api } from "@/services/api";
+import { SafeAreaView } from "react-native-safe-area-context";
 
 interface AttendanceRecord {
   id: string;
@@ -143,7 +144,7 @@ export default function AttendanceScreen() {
   });
 
   return (
-    <View className="flex-1 bg-gray-50 dark:bg-[#0F0F0F]">
+    <SafeAreaView className="flex-1 bg-gray-50 dark:bg-[#0F0F0F]">
       <StatusBar
         barStyle={colorScheme === "dark" ? "light-content" : "dark-content"}
       />
@@ -259,6 +260,6 @@ export default function AttendanceScreen() {
           ))
         )}
       </ScrollView>
-    </View>
+    </SafeAreaView>
   );
 }

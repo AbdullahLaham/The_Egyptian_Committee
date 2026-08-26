@@ -354,7 +354,7 @@ export default function RequestsScreen() {
         
       );
 
-      const result = await response.data;
+      const result = response.data;
       console.log("Response from server:", result);
 
       if (response.data && result.data.status) {
@@ -364,12 +364,24 @@ export default function RequestsScreen() {
       } else {
         Alert.alert("خطأ", result?.message || "حدث خطأ أثناء إرسال الطلب.");
       }
-    } catch (error) {
+    } catch (error: any) {
+    // كشف تفاصيل خطأ 422 بدقة
+    if (error.response) {
+      console.log("تفاصيل رفض السيرفر (422):", error.response.data);
+      
+      // إظهار رسالة الخطأ القادمة من السيرفر للمستخدم
+      const serverMessage = error.response.data?.message 
+        || JSON.stringify(error.response.data?.errors) 
+        || "بيانات الطلب غير مكتملة أو غير صحيحة.";
+        
+      Alert.alert("فشل الإرسال (422)", serverMessage);
+    } else {
       console.error("Error submitting request:", error);
       Alert.alert("خطأ", "تعذر الاتصال بالسيرفر، يرجى المحاولة لاحقاً.");
-    } finally {
-      setSubmitting(false);
     }
+  } finally {
+    setSubmitting(false);
+  }
   }
 
   // Helper for Status Badge

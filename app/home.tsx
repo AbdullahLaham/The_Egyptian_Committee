@@ -38,6 +38,7 @@ import {
 import { DrawerActions, useNavigation } from "@react-navigation/native";
 import HomeHeader from "@/components/home/HomeHeader";
 import Campaigns from "@/app/campaigns";
+import { SafeAreaView } from "react-native-safe-area-context";
 export default function HomeScreen() {
 
   const navigation = useNavigation();
@@ -168,7 +169,7 @@ export default function HomeScreen() {
   // ]);
 
   return (
-    <View className="flex-1 bg-brand-secondary">
+    <SafeAreaView className="flex-1 bg-brand-secondary">
       <StatusBar barStyle="light-content" />
 
       {/* BG */}
@@ -382,6 +383,6 @@ export default function HomeScreen() {
           handleDeliverCandidate
         }
       /> */}
-    </View>
+    </SafeAreaView>
   );
 }

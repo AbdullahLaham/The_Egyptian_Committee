@@ -4,11 +4,13 @@ import { DrawerContentScrollView, DrawerItemList } from "@react-navigation/drawe
 import { Ionicons } from "@expo/vector-icons";
 import { useRouter } from "expo-router";
 import { SafeAreaView } from "react-native-safe-area-context";
+import { logout } from "@/lib/auth-storage";
 
 export default function CustomDrawerContent(props: any) {
   const router = useRouter();
 
-  const handleLogout = () => {
+  const handleLogout = async () => {
+    await logout();
     // Clear tokens / state logic here
     router.replace("/(auth)/login");
   };
@@ -53,7 +55,7 @@ export default function CustomDrawerContent(props: any) {
         </View>
 
         {/* Custom Navigation Links Example */}
-        <View className="px-3 pt-2">
+        {/* <View className="px-3 pt-2">
           <TouchableOpacity 
             onPress={() => router.push("/home")}
             className="flex-row items-center px-4 py-3.5 rounded-xl mb-1 bg-[#1A1A1A]/50 border border-white/5"
@@ -63,7 +65,7 @@ export default function CustomDrawerContent(props: any) {
               الإحصائيات
             </Text>
           </TouchableOpacity>
-        </View>
+        </View> */}
       </DrawerContentScrollView>
 
       {/* Footer Section: Logout */}

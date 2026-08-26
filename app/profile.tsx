@@ -3,12 +3,22 @@ import { View, Text, ScrollView, StatusBar } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import ScreenHeader from "@/components/ScreenHeader";
 import { useTheme } from "@/context/ThemeContext";
+import { SafeAreaView } from "react-native-safe-area-context";
+import { getUser } from "@/lib/auth-storage";
 
 export default function ProfileScreen() {
   const { colorScheme } = useTheme();
 
+  const profileInfo = async() => {
+    const user = await getUser();
+    return user;
+
+  }
+  const prof = profileInfo();
+  console.log(prof, 'profile infooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo');
+
   return (
-    <View className="flex-1 bg-gray-50 dark:bg-[#0F0F0F]">
+    <SafeAreaView className="flex-1 bg-gray-50 dark:bg-[#0F0F0F]">
       <StatusBar barStyle={colorScheme === "dark" ? "light-content" : "dark-content"} />
 
       <ScreenHeader title="الملف الوظيفي" iconName="person-outline" />
@@ -38,6 +48,6 @@ export default function ProfileScreen() {
           ))}
         </View>
       </ScrollView>
-    </View>
+    </SafeAreaView>
   );
 }

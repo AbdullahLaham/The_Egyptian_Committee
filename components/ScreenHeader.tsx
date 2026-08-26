@@ -15,7 +15,7 @@ export default function ScreenHeader({ title, iconName = "apps-outline" }: Scree
   const isDark = colorScheme === "dark";
 
   return (
-    <View className="px-5 pt-14 pb-4 border-b border-gray-200 dark:border-white/5 bg-white dark:bg-[#141414]">
+    <View className="px-5 pt-5 pb-4 border-b border-gray-200 dark:border-white/5 bg-white dark:bg-[#141414]">
       <View className="flex-row items-center justify-between">
         
         {/* العنوان والأيقونة الرئيسية */}
