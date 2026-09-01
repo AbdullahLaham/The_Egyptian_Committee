@@ -308,12 +308,15 @@ import ScreenHeader from "@/components/ScreenHeader";
 import { useTheme } from "@/context/ThemeContext";
 import { api } from "@/services/api";
 import { SafeAreaView } from "react-native-safe-area-context";
+import { Ionicons } from "@expo/vector-icons";
 
 interface DisbursementItem {
   id: number;
   code: string;
   amount: number;
   date: string;
+  from_date: any;
+  to_date: any;
   day_shifts_count: number;
   night_shifts_count: number;
   status: string;
@@ -518,6 +521,26 @@ export default function DisbursementsScreen() {
                 <View className={`px-3 py-1 rounded-full ${item.status_key === "approved" ? "bg-emerald-500/10 border border-emerald-500/30" : "bg-amber-500/10 border border-amber-500/30"}`}>
                   <Text className={`text-xs font-bold ${item.status_key === "approved" ? "text-emerald-600 dark:text-emerald-400" : "text-amber-600 dark:text-amber-400"}`}>
                     {item.status}
+                  </Text>
+                </View>
+              </View>
+              {/* Enhanced Date Range Display */}
+              <View className="bg-gray-50 dark:bg-white/[0.04] p-2.5 rounded-xl border border-gray-100 dark:border-white/5 flex-row items-center justify-between">
+                <View className="flex-row items-center gap-1.5">
+                  <Ionicons name="calendar-outline" size={14} color="#C09A3E" />
+                  <Text className="text-gray-600 dark:text-gray-300 text-xs font-bold">
+                    {item.from_date || item.date}
+                  </Text>
+                </View>
+
+                <View className="flex-row items-center gap-1 px-2">
+                  <View className="h-[1px] w-3 bg-gray-300 dark:bg-gray-600" />
+                  <Ionicons name="arrow-back-outline" size={12} color="#9CA3AF" />
+                </View>
+
+                <View className="flex-row items-center gap-1.5">
+                  <Text className="text-gray-600 dark:text-gray-300 text-xs font-bold">
+                    {item.to_date || item.date}
                   </Text>
                 </View>
               </View>

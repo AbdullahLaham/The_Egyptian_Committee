@@ -141,7 +141,7 @@ const submitLogin = async () => {
             {/* Phone */}
             <View>
               <Text className="text-sm text-gray-600 mb-2 font-medium">
-               البريد الإلكتروني
+              رقم الهوية
               </Text>
 
               <View className="flex-row gap-2">
