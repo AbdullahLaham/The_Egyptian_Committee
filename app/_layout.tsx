@@ -198,6 +198,15 @@ export default function RootLayout() {
               ),
             }}
           />
+          <Drawer.Screen
+            name="notifications"
+            options={{
+              drawerLabel: "الاشعارات",
+              drawerIcon: ({ color, size }) => (
+                <Ionicons name="notifications-outline" size={size} color={color} />
+              ),
+            }}
+          />
 
           <Drawer.Screen
             name="index"
@@ -234,3 +243,94 @@ export default function RootLayout() {
     </ThemeProvider>
   );
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+// To send notifications to your Android, iOS, and Web apps, you can use Firebase Cloud Messaging (FCM) [FCM]. FCM is a reliable, cross-platform messaging solution available at no-cost [FCM].
+
+// Here are the two primary ways you can send notifications:
+
+// Option 1: Send from the Firebase Console (No Coding Required)
+
+// This is perfect for quick testing, marketing campaigns, or targeting specific user segments [Console].
+
+// Go to the Firebase console and select your egyption project.
+
+// In the left-hand navigation, go to Engagement > Messaging [Flutter].
+
+// Click Create your first campaign (or New campaign) and select Firebase Notification messages [Flutter].
+
+// Enter your notification title and body text [Console].
+
+// Target your audience. You can select a specific app, such as your iOS app (com.abdullah.lahham123.maser) or one of your Android apps.
+
+// Schedule the message (send immediately or at a specific time) and click Publish.
+
+// Option 2: Send Programmatically (From Your Server)
+
+// If you want to trigger automated notifications (like chat messages or transactional alerts) [Types], you can use the Firebase Admin SDK or the FCM HTTP v1 API from your backend server or Cloud Functions [Types].
+
+// Here is how the flow works:
+
+// Retrieve the Token: In your client apps (using Kotlin/Java for Android, Swift for iOS, or JavaScript for Web), request notification permissions and retrieve the unique FCM registration token for the device [Flutter].
+
+// Store the Token: Send this registration token to your backend server and store it securely [Flutter].
+
+// Send the Message: Your backend uses the Firebase Admin SDK to build and send a payload targeting that token [Types, Topics].
+
+// For example, a standard JSON payload looks like this:
+
+// {
+//   "message": {
+//     "token": "USER_REGISTRATION_TOKEN",
+//     "notification": {
+//       "title": "Hello!",
+//       "body": "This is a notification."
+//     }
+//   }
+// }
+// Expand
+// Quick Platform Setup Checklist:
+
+// Android: Ensure your apps are configured with Google Play services [Flutter].
+
+// iOS: Enable Push Notifications and Background Modes (Remote notifications) in Xcode [Flutter]. You will also need to upload your APNs Authentication Key (.p8 file) to the Cloud Messaging tab in your Firebase Project Settings [Flutter].
+
+// Web: Generate a Web Push certificates key pair (VAPID key) in your Firebase Project Settings to associate with your web client [Flutter].
+
+// You sent
+
+// i cant fid Engagement

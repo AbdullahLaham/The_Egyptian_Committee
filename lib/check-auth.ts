@@ -73,7 +73,7 @@ export const checkAuth = async () => {
   } catch (error: any) {
     // 1. إذا كان الخطأ بسبب انتهاء الصلاحية أو عدم المخولية (401)
     if (error.response?.status === 401) {
-      await logout(); // امسح التوكن المنتهي
+      // await logout(); // امسح التوكن المنتهي
       throw new Error("UNAUTHORIZED");
     }
 

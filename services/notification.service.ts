@@ -462,6 +462,7 @@ import { Platform } from "react-native";
 import axios from "axios";
 
 import { getToken as getAuthToken } from "@/lib/auth-storage";
+import { api } from "./api";
 
 class NotificationService {
   private getMessagingInstance() {
@@ -598,18 +599,20 @@ class NotificationService {
     }
 
     try {
-      await axios.post(
+      console.log(authToken, 'rrrrrrrrrrrrrrrrrrrrrrrrrrr')
+      await api.post(
         "https://egypt.mahmoudalbatran.com/api/device-tokens",
         {
           token,
           device_name: deviceName,
           platform: Platform.OS
-        },
-        {
-          headers: {
-            Authorization: `Bearer ${authToken}`
-          }
         }
+        // ,
+        // {
+        //   headers: {
+        //     Authorization: `Bearer ${authToken}`
+        //   }
+        // }
       );
 
       console.log(
@@ -691,7 +694,7 @@ export const notificationService =
 
 
 
-
+// {"employee": {"branch": "مقر الرئيسي", "department": "دائرة الحاسوب", "id": 495, "identification": "407966027", "name": "عبد الله مصطفى كامل اللحام", "work": "الحاسوب"}, "token": "139|Z8Odl4zsn36mtuGl529sWoGoAkQ8KzS5l1imSKli34e6ccf1"} uuuuuuuuuuuuuuuuuuuuu
 
 
 
