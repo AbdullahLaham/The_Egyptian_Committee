@@ -445,7 +445,7 @@
 
 
 
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   View,
   Text,
@@ -458,12 +458,20 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import { Ionicons } from "@expo/vector-icons";
 import HomeHeader from "@/components/home/HomeHeader";
 import { useTheme } from "@/context/ThemeContext";
+import { useUserStore } from "@/store/useUserStore";
 
 export default function HomeScreen() {
   const { colorScheme } = useTheme();
   const isDark = colorScheme === "dark";
   const [searchQuery, setSearchQuery] = useState("");
   const [activeTab, setActiveTab] = useState("all");
+
+  const { user, loading, fetchUser } = useUserStore()
+
+
+   useEffect(() => {
+      fetchUser()
+    }, [])
 
   return (
     <SafeAreaView className="flex-1 bg-gray-50 dark:bg-[#0F0F0F]">

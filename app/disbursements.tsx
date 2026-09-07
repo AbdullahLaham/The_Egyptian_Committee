@@ -361,6 +361,7 @@ export default function DisbursementsScreen() {
 
       const data = response.data;
       if (data) {
+        console.log("djjjjjjjjjjjjjjjjjjjjjjjjjjjjj", data)
         setPendingAmount(data.pending_amount ?? 0);
         setTotalReceived(data.total_received ?? 0);
         setDisbursements(data.disbursements || []);

@@ -559,6 +559,7 @@ import { router } from 'expo-router'
 import { api } from '@/services/api'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import { useTheme } from '@/context/ThemeContext'
+import ScreenHeader from '@/components/ScreenHeader'
 
 /* ================== TYPES ================== */
 
@@ -764,7 +765,7 @@ export default function NotificationsPage() {
       <View className="absolute bottom-0 -right-24 w-80 h-80 rounded-full bg-[#C8102E]/10" />
 
       {/* Header Bar */}
-      <View className="px-5 pt-3 pb-4 flex-row items-center justify-between border-b border-gray-200/60 dark:border-white/10 mb-2">
+      {/* <View className="px-5 pt-3 pb-4 flex-row items-center justify-between border-b border-gray-200/60 dark:border-white/10 mb-2">
         <TouchableOpacity
           onPress={() => router.back()}
           activeOpacity={0.7}
@@ -782,7 +783,8 @@ export default function NotificationsPage() {
         </Text>
 
         <View className="w-10" />
-      </View>
+      </View> */}
+      <ScreenHeader title="الإشعارات" iconName="notifications-outline" />
 
       {/* Main List / Empty State */}
       {notifications.length === 0 ? (

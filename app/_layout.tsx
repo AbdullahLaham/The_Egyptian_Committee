@@ -120,7 +120,7 @@ export default function RootLayout() {
           drawerContent={(props) => <CustomDrawerContent {...props} />}
           screenOptions={{
             headerShown: false,
-            drawerPosition: "left",
+            drawerPosition: "right",
             drawerStyle: {
               backgroundColor: "#0F0F0F",
               width: 290,
@@ -151,16 +151,7 @@ export default function RootLayout() {
             }}
           />
 
-          <Drawer.Screen
-            name="profile"
-            options={{
-              drawerItemStyle: { display: "none" },
-              drawerLabel: "الملف الشخصي",
-              drawerIcon: ({ color, size }) => (
-                <Ionicons name="person-outline" size={size} color={color} />
-              ),
-            }}
-          />
+          
           <Drawer.Screen
             name="campaigns"
             options={{
@@ -204,6 +195,16 @@ export default function RootLayout() {
               drawerLabel: "الاشعارات",
               drawerIcon: ({ color, size }) => (
                 <Ionicons name="notifications-outline" size={size} color={color} />
+              ),
+            }}
+          />
+          <Drawer.Screen
+            name="profile"
+            options={{
+              drawerItemStyle: {  },
+              drawerLabel: "الملف الشخصي",
+              drawerIcon: ({ color, size }) => (
+                <Ionicons name="person-outline" size={size} color={color} />
               ),
             }}
           />

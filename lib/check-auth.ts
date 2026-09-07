@@ -47,7 +47,7 @@
 
 import axios from "axios";
 import { getToken, logout } from "./auth-storage";
-import { useUserStore } from "@/store/user.store";
+import { useUserStore } from "@/store/useUserStore";
 
 export const checkAuth = async () => {
   const token = await getToken();
