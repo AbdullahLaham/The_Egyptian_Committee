@@ -8,6 +8,7 @@ export type UserProfile = {
   identification: string
   phone_number: string
   phone_other: string | null
+  profile_photo_path: string | null
   image: string | null
   work: string
   created_at: string

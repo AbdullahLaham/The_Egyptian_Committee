@@ -181,9 +181,9 @@ export default function RootLayout() {
             }}
           />
           <Drawer.Screen
-            name="attendance-requests"
+            name="complaints"
             options={{
-              drawerLabel: "طلب حضور ودوام",
+              drawerLabel: "الشكاوى",
               drawerIcon: ({ color, size }) => (
                 <Ionicons name="clipboard-outline" size={size} color={color} />
               ),
