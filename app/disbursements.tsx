@@ -34,26 +34,6 @@ interface DisbursementItem {
 export default function DisbursementsScreen() {
   const { colorScheme } = useTheme();
 
-  // Date States (YYYY-MM-DD)
-  // const [fromDate, setFromDate] = useState<string>("2026-08-01");
-  // const [toDate, setToDate] = useState<string>("2026-08-31");
-
-  // // Modal Control
-  // const [activePicker, setActivePicker] = useState<"from" | "to" | null>(null);
-  // const [yearInput, setYearInput] = useState<string>("2026");
-  // const [monthInput, setMonthInput] = useState<string>("08");
-  // const [dayInput, setDayInput] = useState<string>("01");
-
-
-
-
-
-
-
-
-
-
-
 
 
   // Date States (YYYY-MM-DD)

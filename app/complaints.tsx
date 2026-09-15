@@ -267,6 +267,8 @@ export default function RequestsScreen() {
           },
         }
       );
+
+      console.log(response.data, "uuuuuuuuuuuuuuuuuuuuuuuuuuuu")
       if (Array.isArray(response.data)) {
         setRequests(response.data);
       } else if (response.data?.data && Array.isArray(response.data.data)) {

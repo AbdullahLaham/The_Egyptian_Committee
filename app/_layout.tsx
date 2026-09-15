@@ -10,6 +10,7 @@ import * as Notifications from "expo-notifications";
 import CustomDrawerContent from "@/components/CustomDrawerContent";
 import { ThemeProvider } from "@/context/ThemeContext";
 import { notificationService } from "@/services/notification.service";
+import { useUserStore } from "@/store/useUserStore";
 // import "@/firebase.background"; // استيراد معالج الخلفية في أول السطر
 
 // 1. Force RTL layout immediately
@@ -62,6 +63,15 @@ function handleNotificationNavigation(data: NotificationData) {
 export default function RootLayout() {
   const navState = useRootNavigationState();
   const handledInitialNotification = useRef(false);
+
+  const { user, loading, fetchUser } = useUserStore();
+
+  console.log("user in root layout", user);
+  
+  
+     useEffect(() => {
+        fetchUser()
+      }, [])
 
   useEffect(() => {
     // التأكد من جاهزية الـ Navigation State قبل تفعيل الاستماع والتوجيه
@@ -155,6 +165,7 @@ export default function RootLayout() {
           <Drawer.Screen
             name="campaigns"
             options={{
+              drawerItemStyle: { display: "none" },
               drawerLabel: "الحملات والترشيحات",
               drawerIcon: ({ color, size }) => (
                 <Ionicons name="megaphone-outline" size={size} color={color} />
@@ -180,9 +191,21 @@ export default function RootLayout() {
               ),
             }}
           />
+
+          <Drawer.Screen
+            name="attendanceRequests"
+            options={{
+              drawerLabel: "نظام الحضور الذكي",
+              drawerIcon: ({ color, size }) => (
+                <Ionicons name="location-outline" size={size} color={color} />
+              ),
+            }}
+          />
+
           <Drawer.Screen
             name="complaints"
             options={{
+              drawerItemStyle: { display: "none" },
               drawerLabel: "الشكاوى",
               drawerIcon: ({ color, size }) => (
                 <Ionicons name="clipboard-outline" size={size} color={color} />

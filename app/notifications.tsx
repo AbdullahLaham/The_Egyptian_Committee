@@ -733,7 +733,7 @@ export default function NotificationsPage() {
     try {
       const token = await getToken()
       await api.put(
-        '/notifications/read_at',
+        'v1/employee/notifications/read_at',
         {},
         { headers: { Authorization: `Bearer ${token}` } }
       )

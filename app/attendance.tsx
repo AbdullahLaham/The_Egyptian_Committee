@@ -74,195 +74,195 @@
 
 
 
-// import React, { useState, useEffect } from "react";
-// import {
-//   View,
-//   Text,
-//   ScrollView,
-//   TouchableOpacity,
-//   StatusBar,
-//   ActivityIndicator,
-//   RefreshControl,
-// } from "react-native";
-// import ScreenHeader from "@/components/ScreenHeader";
-// import { useTheme } from "@/context/ThemeContext";
-// import axios from "axios";
-// import { api } from "@/services/api";
-// import { SafeAreaView } from "react-native-safe-area-context";
+import React, { useState, useEffect } from "react";
+import {
+  View,
+  Text,
+  ScrollView,
+  TouchableOpacity,
+  StatusBar,
+  ActivityIndicator,
+  RefreshControl,
+} from "react-native";
+import ScreenHeader from "@/components/ScreenHeader";
+import { useTheme } from "@/context/ThemeContext";
+import axios from "axios";
+import { api } from "@/services/api";
+import { SafeAreaView } from "react-native-safe-area-context";
 
-// interface AttendanceRecord {
-//   id: string;
-//   attendance_id: number;
-//   date_formatted: string;
-//   raw_date: string;
-//   shift_key: string;
-//   shift_type: string;
-//   status: string;
-//   status_class: string;
-//   base_hours: number;
-//   overtime_hours: number;
-// }
+interface AttendanceRecord {
+  id: string;
+  attendance_id: number;
+  date_formatted: string;
+  raw_date: string;
+  shift_key: string;
+  shift_type: string;
+  status: string;
+  status_class: string;
+  base_hours: number;
+  overtime_hours: number;
+}
 
-// export default function AttendanceScreen() {
-//   const { colorScheme } = useTheme();
-//   const [selectedShift, setSelectedShift] = useState("all");
-//   const [history, setHistory] = useState<AttendanceRecord[]>([]);
-//   const [loading, setLoading] = useState(true);
-//   const [refreshing, setRefreshing] = useState(false);
-//   const [error, setError] = useState<string | null>(null);
+export default function AttendanceScreen() {
+  const { colorScheme } = useTheme();
+  const [selectedShift, setSelectedShift] = useState("all");
+  const [history, setHistory] = useState<AttendanceRecord[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [refreshing, setRefreshing] = useState(false);
+  const [error, setError] = useState<string | null>(null);
 
-//   const fetchAttendanceHistory = async () => {
-//     try {
-//       setError(null);
-//       const response = await api.get("https://egypt.mahmoudalbatran.com/api/attendance/history")
-//       const data = await response.data;
+  const fetchAttendanceHistory = async () => {
+    try {
+      setError(null);
+      const response = await api.get("https://egypt.mahmoudalbatran.com/api/attendance/history")
+      const data = await response.data;
 
-//       if (data && data.history) {
-//         setHistory(data.history);
-//       }
-//     } catch (err) {
-//       console.error("Error fetching attendance history:", err);
-//       setError("حدث خطأ أثناء تحميل سجل الحضور");
-//     } finally {
-//       setLoading(false);
-//       setRefreshing(false);
-//     }
-//   };
+      if (data && data.history) {
+        setHistory(data.history);
+      }
+    } catch (err) {
+      console.error("Error fetching attendance history:", err);
+      setError("حدث خطأ أثناء تحميل سجل الحضور");
+    } finally {
+      setLoading(false);
+      setRefreshing(false);
+    }
+  };
 
-//   useEffect(() => {
-//     fetchAttendanceHistory();
-//   }, []);
+  useEffect(() => {
+    fetchAttendanceHistory();
+  }, []);
 
-//   const onRefresh = () => {
-//     setRefreshing(true);
-//     fetchAttendanceHistory();
-//   };
+  const onRefresh = () => {
+    setRefreshing(true);
+    fetchAttendanceHistory();
+  };
 
-//   const filteredHistory = history.filter((item) => {
-//     if (selectedShift === "all") return true;
-//     return item.shift_key === selectedShift;
-//   });
+  const filteredHistory = history.filter((item) => {
+    if (selectedShift === "all") return true;
+    return item.shift_key === selectedShift;
+  });
 
-//   return (
-//     <SafeAreaView className="flex-1 bg-gray-50 dark:bg-[#0F0F0F]">
-//       <StatusBar
-//         barStyle={colorScheme === "dark" ? "light-content" : "dark-content"}
-//       />
+  return (
+    <SafeAreaView className="flex-1 bg-gray-50 dark:bg-[#0F0F0F]">
+      <StatusBar
+        barStyle={colorScheme === "dark" ? "light-content" : "dark-content"}
+      />
 
-//       <ScreenHeader title="سجل الحضور والدوام" iconName="calendar-outline" />
+      <ScreenHeader title="سجل الحضور والدوام" iconName="calendar-outline" />
 
-//       <ScrollView
-//         className="px-5 pt-4"
-//         showsVerticalScrollIndicator={false}
-//         refreshControl={
-//           <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
-//         }
-//       >
-//         {/* Shift Filter */}
-//         <View className="flex-row gap-2 mb-4">
-//           {[
-//             { id: "all", label: "الكل" },
-//             { id: "day", label: "شفت نهار ☀️" },
-//             { id: "night", label: "شفت ليل 🌙" },
-//           ].map((item) => (
-//             <TouchableOpacity
-//               key={item.id}
-//               onPress={() => setSelectedShift(item.id)}
-//               className={`px-4 py-2 rounded-xl border ${
-//                 selectedShift === item.id
-//                   ? "bg-[#C09A3E] border-[#C09A3E]"
-//                   : "bg-gray-200 dark:bg-white/5 border-gray-300 dark:border-white/10"
-//               }`}
-//             >
-//               <Text
-//                 className={`text-xs font-bold ${
-//                   selectedShift === item.id
-//                     ? "text-black"
-//                     : "text-gray-700 dark:text-gray-300"
-//                 }`}
-//               >
-//                 {item.label}
-//               </Text>
-//             </TouchableOpacity>
-//           ))}
-//         </View>
+      <ScrollView
+        className="px-5 pt-4"
+        showsVerticalScrollIndicator={false}
+        refreshControl={
+          <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+        }
+      >
+        {/* Shift Filter */}
+        <View className="flex-row gap-2 mb-4">
+          {[
+            { id: "all", label: "الكل" },
+            { id: "day", label: "شفت نهار ☀️" },
+            { id: "night", label: "شفت ليل 🌙" },
+          ].map((item) => (
+            <TouchableOpacity
+              key={item.id}
+              onPress={() => setSelectedShift(item.id)}
+              className={`px-4 py-2 rounded-xl border ${
+                selectedShift === item.id
+                  ? "bg-[#C09A3E] border-[#C09A3E]"
+                  : "bg-gray-200 dark:bg-white/5 border-gray-300 dark:border-white/10"
+              }`}
+            >
+              <Text
+                className={`text-xs font-bold ${
+                  selectedShift === item.id
+                    ? "text-black"
+                    : "text-gray-700 dark:text-gray-300"
+                }`}
+              >
+                {item.label}
+              </Text>
+            </TouchableOpacity>
+          ))}
+        </View>
 
-//         {/* Loading State */}
-//         {loading ? (
-//           <View className="py-20 items-center justify-center">
-//             <ActivityIndicator size="large" color="#C09A3E" />
-//             <Text className="text-gray-500 dark:text-gray-400 mt-3 text-xs">
-//               جاري تحميل السجل...
-//             </Text>
-//           </View>
-//         ) : error ? (
-//           <View className="py-10 items-center justify-center">
-//             <Text className="text-red-500 text-sm font-bold">{error}</Text>
-//           </View>
-//         ) : filteredHistory.length === 0 ? (
-//           <View className="py-10 items-center justify-center">
-//             <Text className="text-gray-500 dark:text-gray-400 text-sm">
-//               لا يوجد سجلات دوام مطابقة.
-//             </Text>
-//           </View>
-//         ) : (
-//           /* List */
-//           filteredHistory.map((item) => (
-//             <View
-//               key={item.id}
-//               className="bg-white dark:bg-[#1A1A1A] border border-gray-200 dark:border-white/10 rounded-2xl p-4 mb-3 shadow-sm dark:shadow-none"
-//             >
-//               <View className="flex-row items-center justify-between border-b border-gray-100 dark:border-white/5 pb-2 mb-3">
-//                 <Text className="text-gray-900 dark:text-white font-extrabold text-sm">
-//                   {item.date_formatted}
-//                 </Text>
-//                 <View
-//                   className={`px-3 py-1 rounded-full ${
-//                     item.status_class === "absent"
-//                       ? "bg-red-500/10 border border-red-500/30"
-//                       : "bg-emerald-500/10 border border-emerald-500/30"
-//                   }`}
-//                 >
-//                   <Text
-//                     className={`text-xs font-bold ${
-//                       item.status_class === "absent"
-//                         ? "text-red-500 dark:text-red-400"
-//                         : "text-emerald-600 dark:text-emerald-400"
-//                     }`}
-//                   >
-//                     {item.status}
-//                   </Text>
-//                 </View>
-//               </View>
+        {/* Loading State */}
+        {loading ? (
+          <View className="py-20 items-center justify-center">
+            <ActivityIndicator size="large" color="#C09A3E" />
+            <Text className="text-gray-500 dark:text-gray-400 mt-3 text-xs">
+              جاري تحميل السجل...
+            </Text>
+          </View>
+        ) : error ? (
+          <View className="py-10 items-center justify-center">
+            <Text className="text-red-500 text-sm font-bold">{error}</Text>
+          </View>
+        ) : filteredHistory.length === 0 ? (
+          <View className="py-10 items-center justify-center">
+            <Text className="text-gray-500 dark:text-gray-400 text-sm">
+              لا يوجد سجلات دوام مطابقة.
+            </Text>
+          </View>
+        ) : (
+          /* List */
+          filteredHistory.map((item) => (
+            <View
+              key={item.id}
+              className="bg-white dark:bg-[#1A1A1A] border border-gray-200 dark:border-white/10 rounded-2xl p-4 mb-3 shadow-sm dark:shadow-none"
+            >
+              <View className="flex-row items-center justify-between border-b border-gray-100 dark:border-white/5 pb-2 mb-3">
+                <Text className="text-gray-900 dark:text-white font-extrabold text-sm">
+                  {item.date_formatted}
+                </Text>
+                <View
+                  className={`px-3 py-1 rounded-full ${
+                    item.status_class === "absent"
+                      ? "bg-red-500/10 border border-red-500/30"
+                      : "bg-emerald-500/10 border border-emerald-500/30"
+                  }`}
+                >
+                  <Text
+                    className={`text-xs font-bold ${
+                      item.status_class === "absent"
+                        ? "text-red-500 dark:text-red-400"
+                        : "text-emerald-600 dark:text-emerald-400"
+                    }`}
+                  >
+                    {item.status}
+                  </Text>
+                </View>
+              </View>
 
-//               <View className="flex-row justify-between">
-//                 <Text className="text-gray-500 dark:text-gray-400 text-xs">
-//                   نوع الدوام:{" "}
-//                   <Text className="text-gray-800 dark:text-gray-200 font-bold">
-//                     {item.shift_type}
-//                   </Text>
-//                 </Text>
+              <View className="flex-row justify-between">
+                <Text className="text-gray-500 dark:text-gray-400 text-xs">
+                  نوع الدوام:{" "}
+                  <Text className="text-gray-800 dark:text-gray-200 font-bold">
+                    {item.shift_type}
+                  </Text>
+                </Text>
 
-//                 <Text className="text-gray-500 dark:text-gray-400 text-xs">
-//                   ساعات الأساسي:{" "}
-//                   <Text className="text-gray-800 dark:text-gray-200 font-bold">
-//                     {item.base_hours} ساعة
-//                   </Text>
-//                 </Text>
+                <Text className="text-gray-500 dark:text-gray-400 text-xs">
+                  ساعات الأساسي:{" "}
+                  <Text className="text-gray-800 dark:text-gray-200 font-bold">
+                    {item.base_hours} ساعة
+                  </Text>
+                </Text>
 
-//                 <Text className="text-[#C09A3E] text-xs font-bold">
-//                   {item.overtime_hours > 0
-//                     ? `${item.overtime_hours} ساعة إضافي`
-//                     : "بدون إضافي"}
-//                 </Text>
-//               </View>
-//             </View>
-//           ))
-//         )}
-//       </ScrollView>
-//     </SafeAreaView>
-//   );
-// }
+                <Text className="text-[#C09A3E] text-xs font-bold">
+                  {item.overtime_hours > 0
+                    ? `${item.overtime_hours} ساعة إضافي`
+                    : "بدون إضافي"}
+                </Text>
+              </View>
+            </View>
+          ))
+        )}
+      </ScrollView>
+    </SafeAreaView>
+  );
+}
 
 
 
@@ -1246,451 +1246,456 @@
 
 
 
-import React, { useState, useEffect } from "react";
-import {
-  View,
-  Text,
-  ScrollView,
-  TouchableOpacity,
-  StatusBar,
-  ActivityIndicator,
-  RefreshControl,
-  Alert,
-} from "react-native";
-import { Ionicons } from "@expo/vector-icons";
-import ScreenHeader from "@/components/ScreenHeader";
-import { useTheme } from "@/context/ThemeContext";
-import { api } from "@/services/api";
-import { SafeAreaView } from "react-native-safe-area-context";
-import * as Location from "expo-location";
+// import React, { useState, useEffect } from "react";
+// import {
+//   View,
+//   Text,
+//   ScrollView,
+//   TouchableOpacity,
+//   StatusBar,
+//   ActivityIndicator,
+//   RefreshControl,
+//   Alert,
+// } from "react-native";
+// import { Ionicons } from "@expo/vector-icons";
+// import ScreenHeader from "@/components/ScreenHeader";
+// import { useTheme } from "@/context/ThemeContext";
+// import { api } from "@/services/api";
+// import { SafeAreaView } from "react-native-safe-area-context";
+// import * as Location from "expo-location";
 
-interface AttendanceRecord {
-  id: string;
-  attendance_id: number;
-  date_formatted: string;
-  raw_date: string;
-  shift_key: string;
-  shift_type: string;
-  status: string;
-  status_class: "approved" | "pending" | "rejected" | "absent" | string;
-  base_hours: number;
-  overtime_hours: number;
-  latitude?: number;
-  longitude?: number;
-}
+// interface AttendanceRecord {
+//   id: string;
+//   attendance_id: number;
+//   date_formatted: string;
+//   raw_date: string;
+//   shift_key: string;
+//   shift_type: string;
+//   status: string;
+//   status_class: "approved" | "pending" | "rejected" | "absent" | string;
+//   base_hours: number;
+//   overtime_hours: number;
+//   latitude?: number;
+//   longitude?: number;
+// }
 
-export default function AttendanceScreen() {
-  const { colorScheme } = useTheme();
-  const isDark = colorScheme === "dark";
+// export default function AttendanceScreen() {
+//   const { colorScheme } = useTheme();
+//   const isDark = colorScheme === "dark";
 
-  // State Management
-  const [selectedShift, setSelectedShift] = useState("all");
-  const [history, setHistory] = useState<AttendanceRecord[]>([]);
-  const [todayRecord, setTodayRecord] = useState<AttendanceRecord | null>(null);
+//   // State Management
+//   const [selectedShift, setSelectedShift] = useState("all");
+//   const [history, setHistory] = useState<AttendanceRecord[]>([]);
+//   const [todayRecord, setTodayRecord] = useState<AttendanceRecord | null>(null);
 
-  // Check-in action state
-  const [checkInShift, setCheckInShift] = useState<"day" | "night">("day");
-  const [actionLoading, setActionLoading] = useState(false);
+//   // Check-in action state
+//   const [checkInShift, setCheckInShift] = useState<"day" | "night">("day");
+//   const [actionLoading, setActionLoading] = useState(false);
 
-  // General screen state
-  const [loading, setLoading] = useState(true);
-  const [refreshing, setRefreshing] = useState(false);
-  const [error, setError] = useState<string | null>(null);
+//   // General screen state
+//   const [loading, setLoading] = useState(true);
+//   const [refreshing, setRefreshing] = useState(false);
+//   const [error, setError] = useState<string | null>(null);
 
-  const fetchAttendanceHistory = async () => {
-    try {
-      setError(null);
-      const response = await api.get("/attendance/history");
-      const data = response.data;
+//   const fetchAttendanceHistory = async () => {
+//     try {
+//       setError(null);
+//       const response = await api.get("/attendance/history");
+//       const data = response.data;
 
-      if (data && data.history) {
-        setHistory(data.history);
+//       if (data && data.history) {
+//         setHistory(data.history);
 
-        const todayStr = new Date().toISOString().split("T")[0];
-        const todayItem = data.history.find(
-          (item: AttendanceRecord) => item.raw_date === todayStr
-        );
-        setTodayRecord(todayItem || null);
-      }
-    } catch (err) {
-      console.error("Error fetching attendance history:", err);
-      setError("حدث خطأ أثناء تحميل سجل الحضور");
-    } finally {
-      setLoading(false);
-      setRefreshing(false);
-    }
-  };
+//         const todayStr = new Date().toISOString().split("T")[0];
+//         const todayItem = data.history.find(
+//           (item: AttendanceRecord) => item.raw_date === todayStr
+//         );
+//         setTodayRecord(todayItem || null);
+//       }
+//     } catch (err) {
+//       console.error("Error fetching attendance history:", err);
+//       setError("حدث خطأ أثناء تحميل سجل الحضور");
+//     } finally {
+//       setLoading(false);
+//       setRefreshing(false);
+//     }
+//   };
 
-  useEffect(() => {
-    fetchAttendanceHistory();
-  }, []);
+//   useEffect(() => {
+//     fetchAttendanceHistory();
+//   }, []);
 
-  const onRefresh = () => {
-    setRefreshing(true);
-    fetchAttendanceHistory();
-  };
+//   const onRefresh = () => {
+//     setRefreshing(true);
+//     fetchAttendanceHistory();
+//   };
 
-  const handleSendLocation = async (actionType: "check-in" | "check-out") => {
-    try {
-      setActionLoading(true);
+//   const handleSendLocation = async (actionType: "check-in" | "check-out") => {
+//     try {
+//       setActionLoading(true);
 
-      const { status } = await Location.requestForegroundPermissionsAsync();
-      if (status !== "granted") {
-        Alert.alert(
-          "تنبيه",
-          "يرجى السماح بالوصول للموقع الجغرافي لتسجيل الحضور."
-        );
-        return;
-      }
+//       const { status } = await Location.requestForegroundPermissionsAsync();
+//       if (status !== "granted") {
+//         Alert.alert(
+//           "تنبيه",
+//           "يرجى السماح بالوصول للموقع الجغرافي لتسجيل الحضور."
+//         );
+//         return;
+//       }
 
-      const location = await Location.getCurrentPositionAsync({
-        accuracy: Location.Accuracy.High,
-      });
+//       const location = await Location.getCurrentPositionAsync({
+//         accuracy: Location.Accuracy.High,
+//       });
 
-      const todayDate = new Date().toISOString().split("T")[0];
+//       const todayDate = new Date().toISOString().split("T")[0];
 
-      const payload = {
-        action_type: actionType,
-        shift_key: checkInShift,
-        latitude: location.coords.latitude,
-        longitude: location.coords.longitude,
-        date: todayDate,
-      };
+//       const payload = {
+//         action_type: actionType,
+//         shift_key: checkInShift,
+//         latitude: location.coords.latitude,
+//         longitude: location.coords.longitude,
+//         date: todayDate,
+//       };
 
-      const response = await api.post("/attendance/submit", payload);
+//       const response = await api.post("/attendance/submit", payload);
 
-      Alert.alert(
-        "تم الإرسال بنجاح",
-        response.data?.message ||
-          "تم إرسال إحداثيات موقعك ونوع الشفت بنجاح، وطلبك قيد المراجعة اليدوية."
-      );
+//       Alert.alert(
+//         "تم الإرسال بنجاح",
+//         response.data?.message ||
+//           "تم إرسال إحداثيات موقعك ونوع الشفت بنجاح، وطلبك قيد المراجعة اليدوية."
+//       );
 
-      fetchAttendanceHistory();
-    } catch (err: any) {
-      console.error("Error submitting attendance:", err);
-      Alert.alert(
-        "خطأ",
-        err.response?.data?.message || "تعذر إرسال موقع الحضور، حاول مرة أخرى."
-      );
-    } finally {
-      setActionLoading(false);
-    }
-  };
+//       fetchAttendanceHistory();
+//     } catch (err: any) {
+//       console.error("Error submitting attendance:", err);
+//       Alert.alert(
+//         "خطأ",
+//         err.response?.data?.message || "تعذر إرسال موقع الحضور، حاول مرة أخرى."
+//       );
+//     } finally {
+//       setActionLoading(false);
+//     }
+//   };
 
-  const filteredHistory = history.filter((item) => {
-    if (selectedShift === "all") return true;
-    return item.shift_key === selectedShift;
-  });
+//   const filteredHistory = history.filter((item) => {
+//     if (selectedShift === "all") return true;
+//     return item.shift_key === selectedShift;
+//   });
 
-  return (
-    <SafeAreaView className="flex-1 bg-gray-50 dark:bg-[#0F0F0F]">
-      <StatusBar barStyle={isDark ? "light-content" : "dark-content"} />
+//   return (
+//     <SafeAreaView className="flex-1 bg-gray-50 dark:bg-[#0F0F0F]">
+//       <StatusBar barStyle={isDark ? "light-content" : "dark-content"} />
 
-      <ScreenHeader title="سجل الحضور والدوام" iconName="calendar-outline" />
+//       <ScreenHeader title="سجل الحضور والدوام" iconName="calendar-outline" />
 
-      <ScrollView
-        className="px-5 pt-4"
-        showsVerticalScrollIndicator={false}
-        refreshControl={
-          <RefreshControl
-            refreshing={refreshing}
-            onRefresh={onRefresh}
-            tintColor="#C09A3E"
-          />
-        }
-      >
-        {/* ========================================================= */}
-        {/* CARD CONTAINER                                           */}
-        {/* ========================================================= */}
-        <View className="bg-white dark:bg-[#181818] border border-gray-200 dark:border-white/10 rounded-3xl p-5 mb-6 shadow-sm">
+//       <ScrollView
+//         className="px-5 pt-4"
+//         showsVerticalScrollIndicator={false}
+//         refreshControl={
+//           <RefreshControl
+//             refreshing={refreshing}
+//             onRefresh={onRefresh}
+//             tintColor="#C09A3E"
+//           />
+//         }
+//       >
+//         {/* ========================================================= */}
+//         {/* CARD CONTAINER                                           */}
+//         {/* ========================================================= */}
+//         <View className="bg-white dark:bg-[#181818] border border-gray-200 dark:border-white/10 rounded-3xl p-5 mb-6 shadow-sm">
           
-          {/* Card Header */}
-          <View className="flex-row items-center justify-between pb-4 mb-4 border-b border-gray-100 dark:border-white/5">
-            <View className="flex-row items-center gap-3">
-              <View className="w-10 h-10 rounded-2xl bg-[#C09A3E]/10 items-center justify-center border border-[#C09A3E]/20">
-                <Ionicons name="location-sharp" size={20} color="#C09A3E" />
-              </View>
-              <View>
-                <Text className="text-gray-900 dark:text-white font-black text-base">
-                  تسجيل الحضور الميداني
-                </Text>
-                <View className="flex-row items-center gap-1.5 mt-0.5">
-                  <View className="w-2 h-2 rounded-full bg-emerald-500" />
-                  <Text className="text-gray-400 dark:text-gray-400 text-[11px] font-bold">
-                    جاهز لالتقاط الموقع GPS
-                  </Text>
-                </View>
-              </View>
-            </View>
+//           {/* Card Header */}
+//           <View className="flex-row items-center justify-between pb-4 mb-4 border-b border-gray-100 dark:border-white/5">
+//             <View className="flex-row items-center gap-3">
+//               <View className="w-10 h-10 rounded-2xl bg-[#C09A3E]/10 items-center justify-center border border-[#C09A3E]/20">
+//                 <Ionicons name="location-sharp" size={20} color="#C09A3E" />
+//               </View>
+//               <View>
+//                 <Text className="text-gray-900 dark:text-white font-black text-base">
+//                   تسجيل الحضور الميداني
+//                 </Text>
+//                 <View className="flex-row items-center gap-1.5 mt-0.5">
+//                   <View className="w-2 h-2 rounded-full bg-emerald-500" />
+//                   <Text className="text-gray-400 dark:text-gray-400 text-[11px] font-bold">
+//                     جاهز لالتقاط الموقع GPS
+//                   </Text>
+//                 </View>
+//               </View>
+//             </View>
 
-            <View className="bg-gray-100 dark:bg-white/5 px-3 py-1.5 rounded-xl border border-gray-200/50 dark:border-white/10">
-              <Text className="text-xs font-bold text-gray-600 dark:text-gray-300">
-                {new Date().toLocaleDateString("ar-EG", {
-                  weekday: "short",
-                  day: "numeric",
-                  month: "short",
-                })}
-              </Text>
-            </View>
-          </View>
+//             <View className="bg-gray-100 dark:bg-white/5 px-3 py-1.5 rounded-xl border border-gray-200/50 dark:border-white/10">
+//               <Text className="text-xs font-bold text-gray-600 dark:text-gray-300">
+//                 {new Date().toLocaleDateString("ar-EG", {
+//                   weekday: "short",
+//                   day: "numeric",
+//                   month: "short",
+//                 })}
+//               </Text>
+//             </View>
+//           </View>
 
-          {/* Today's Record Status */}
-          {todayRecord && (
-            <View
-              className={`p-3.5 rounded-2xl mb-5 border flex-row items-center justify-between ${
-                todayRecord.status_class === "approved"
-                  ? "bg-emerald-500/10 border-emerald-500/30"
-                  : todayRecord.status_class === "pending"
-                  ? "bg-amber-500/10 border-amber-500/30"
-                  : "bg-red-500/10 border-red-500/30"
-              }`}
-            >
-              <View className="flex-row items-center gap-2.5">
-                <Ionicons
-                  name={
-                    todayRecord.status_class === "approved"
-                      ? "checkmark-circle"
-                      : todayRecord.status_class === "pending"
-                      ? "time"
-                      : "close-circle"
-                  }
-                  size={20}
-                  color={
-                    todayRecord.status_class === "approved"
-                      ? "#10B981"
-                      : todayRecord.status_class === "pending"
-                      ? "#F59E0B"
-                      : "#EF4444"
-                  }
-                />
-                <Text
-                  className={`text-xs font-extrabold ${
-                    todayRecord.status_class === "approved"
-                      ? "text-emerald-600 dark:text-emerald-400"
-                      : todayRecord.status_class === "pending"
-                      ? "text-amber-600 dark:text-amber-400"
-                      : "text-red-500 dark:text-red-400"
-                  }`}
-                >
-                  حالة اليوم: {todayRecord.status}
-                </Text>
-              </View>
+//           {/* Today's Record Status */}
+//           {todayRecord && (
+//             <View
+//               className={`p-3.5 rounded-2xl mb-5 border flex-row items-center justify-between ${
+//                 todayRecord.status_class === "approved"
+//                   ? "bg-emerald-500/10 border-emerald-500/30"
+//                   : todayRecord.status_class === "pending"
+//                   ? "bg-amber-500/10 border-amber-500/30"
+//                   : "bg-red-500/10 border-red-500/30"
+//               }`}
+//             >
+//               <View className="flex-row items-center gap-2.5">
+//                 <Ionicons
+//                   name={
+//                     todayRecord.status_class === "approved"
+//                       ? "checkmark-circle"
+//                       : todayRecord.status_class === "pending"
+//                       ? "time"
+//                       : "close-circle"
+//                   }
+//                   size={20}
+//                   color={
+//                     todayRecord.status_class === "approved"
+//                       ? "#10B981"
+//                       : todayRecord.status_class === "pending"
+//                       ? "#F59E0B"
+//                       : "#EF4444"
+//                   }
+//                 />
+//                 <Text
+//                   className={`text-xs font-extrabold ${
+//                     todayRecord.status_class === "approved"
+//                       ? "text-emerald-600 dark:text-emerald-400"
+//                       : todayRecord.status_class === "pending"
+//                       ? "text-amber-600 dark:text-amber-400"
+//                       : "text-red-500 dark:text-red-400"
+//                   }`}
+//                 >
+//                   حالة اليوم: {todayRecord.status}
+//                 </Text>
+//               </View>
 
-              <Text className="text-xs font-bold text-gray-500 dark:text-gray-400">
-                {todayRecord.shift_type}
-              </Text>
-            </View>
-          )}
+//               <Text className="text-xs font-bold text-gray-500 dark:text-gray-400">
+//                 {todayRecord.shift_type}
+//               </Text>
+//             </View>
+//           )}
 
-          {/* Shift Selector */}
-          <Text className="text-gray-500 dark:text-gray-400 text-xs font-extrabold mb-2">
-            اختر شفت الدوام الحالي:
-          </Text>
+//           {/* Shift Selector */}
+//           <Text className="text-gray-500 dark:text-gray-400 text-xs font-extrabold mb-2">
+//             اختر شفت الدوام الحالي:
+//           </Text>
 
-          <View className="bg-gray-100 dark:bg-white/5 p-1 rounded-2xl flex-row gap-1 mb-5 border border-gray-200/50 dark:border-white/5">
-            {/* Day Shift Button */}
-            <TouchableOpacity
-              onPress={() => setCheckInShift("day")}
-              activeOpacity={0.8}
-              style={{
-                backgroundColor: checkInShift === "day" ? "#C09A3E" : "transparent",
-              }}
-              className="flex-1 py-2.5 rounded-xl flex-row items-center justify-center gap-2"
-            >
-              <Ionicons
-                name="sunny"
-                size={16}
-                color={checkInShift === "day" ? "#000000" : isDark ? "#A1A1AA" : "#71717A"}
-              />
-              <Text
-                style={{
-                  color: checkInShift === "day" ? "#000000" : isDark ? "#A1A1AA" : "#4B5563",
-                }}
-                className="text-xs font-extrabold"
-              >
-                شفت نهار
-              </Text>
-            </TouchableOpacity>
+//           <View className="bg-gray-100 dark:bg-white/5 p-1 rounded-2xl flex-row gap-1 mb-5 border border-gray-200/50 dark:border-white/5">
+//             {/* Day Shift Button */}
+//             <TouchableOpacity
+//               onPress={() => setCheckInShift("day")}
+//               activeOpacity={0.8}
+//               style={{
+//                 backgroundColor: checkInShift === "day" ? "#C09A3E" : "transparent",
+//               }}
+//               className="flex-1 py-2.5 rounded-xl flex-row items-center justify-center gap-2"
+//             >
+//               <Ionicons
+//                 name="sunny"
+//                 size={16}
+//                 color={checkInShift === "day" ? "#000000" : isDark ? "#A1A1AA" : "#71717A"}
+//               />
+//               <Text
+//                 style={{
+//                   color: checkInShift === "day" ? "#000000" : isDark ? "#A1A1AA" : "#4B5563",
+//                 }}
+//                 className="text-xs font-extrabold"
+//               >
+//                 شفت نهار
+//               </Text>
+//             </TouchableOpacity>
 
-            {/* Night Shift Button */}
-            <TouchableOpacity
-              onPress={() => setCheckInShift("night")}
-              activeOpacity={0.8}
-              style={{
-                backgroundColor: checkInShift === "night" ? "#C09A3E" : "transparent",
-              }}
-              className="flex-1 py-2.5 rounded-xl flex-row items-center justify-center gap-2"
-            >
-              <Ionicons
-                name="moon"
-                size={15}
-                color={checkInShift === "night" ? "#000000" : isDark ? "#A1A1AA" : "#71717A"}
-              />
-              <Text
-                style={{
-                  color: checkInShift === "night" ? "#000000" : isDark ? "#A1A1AA" : "#4B5563",
-                }}
-                className="text-xs font-extrabold"
-              >
-                شفت ليل
-              </Text>
-            </TouchableOpacity>
-          </View>
+//             {/* Night Shift Button */}
+//             <TouchableOpacity
+//               onPress={() => setCheckInShift("night")}
+//               activeOpacity={0.8}
+//               style={{
+//                 backgroundColor: checkInShift === "night" ? "#C09A3E" : "transparent",
+//               }}
+//               className="flex-1 py-2.5 rounded-xl flex-row items-center justify-center gap-2"
+//             >
+//               <Ionicons
+//                 name="moon"
+//                 size={15}
+//                 color={checkInShift === "night" ? "#000000" : isDark ? "#A1A1AA" : "#71717A"}
+//               />
+//               <Text
+//                 style={{
+//                   color: checkInShift === "night" ? "#000000" : isDark ? "#A1A1AA" : "#4B5563",
+//                 }}
+//                 className="text-xs font-extrabold"
+//               >
+//                 شفت ليل
+//               </Text>
+//             </TouchableOpacity>
+//           </View>
 
-          {/* Action Buttons */}
-          {actionLoading ? (
-            <View className="py-3 items-center justify-center">
-              <ActivityIndicator size="small" color="#C09A3E" />
-            </View>
-          ) : (
-            <View className="flex-row gap-2.5">
-              <TouchableOpacity
-                onPress={() => handleSendLocation("check-in")}
-                activeOpacity={0.8}
-                className="flex-1 bg-[#C09A3E] h-12 rounded-2xl flex-row items-center justify-center gap-2"
-              >
-                <Ionicons name="navigate" size={18} color="#000" />
-                <Text className="text-black font-black text-xs">
-                  إرسال موقع الحضور
-                </Text>
-              </TouchableOpacity>
+//           {/* Action Buttons */}
+//           {actionLoading ? (
+//             <View className="py-3 items-center justify-center">
+//               <ActivityIndicator size="small" color="#C09A3E" />
+//             </View>
+//           ) : (
+//             <View className="flex-row gap-2.5">
+//               <TouchableOpacity
+//                 onPress={() => handleSendLocation("check-in")}
+//                 activeOpacity={0.8}
+//                 className="flex-1 bg-[#C09A3E] h-12 rounded-2xl flex-row items-center justify-center gap-2"
+//               >
+//                 <Ionicons name="navigate" size={18} color="#000" />
+//                 <Text className="text-black font-black text-xs">
+//                   إرسال موقع الحضور
+//                 </Text>
+//               </TouchableOpacity>
 
-              {/* <TouchableOpacity
-                onPress={() => handleSendLocation("check-out")}
-                activeOpacity={0.8}
-                className="flex-1 bg-gray-200 dark:bg-white/10 h-12 rounded-2xl flex-row items-center justify-center gap-2"
-              >
-                <Ionicons
-                  name="log-out-outline"
-                  size={18}
-                  color={isDark ? "#FFF" : "#000"}
-                />
-                <Text className="text-gray-900 dark:text-white font-black text-xs">
-                  إرسال موقع الانصراف
-                </Text>
-              </TouchableOpacity> */}
-            </View>
-          )}
-        </View>
+//               {/* <TouchableOpacity
+//                 onPress={() => handleSendLocation("check-out")}
+//                 activeOpacity={0.8}
+//                 className="flex-1 bg-gray-200 dark:bg-white/10 h-12 rounded-2xl flex-row items-center justify-center gap-2"
+//               >
+//                 <Ionicons
+//                   name="log-out-outline"
+//                   size={18}
+//                   color={isDark ? "#FFF" : "#000"}
+//                 />
+//                 <Text className="text-gray-900 dark:text-white font-black text-xs">
+//                   إرسال موقع الانصراف
+//                 </Text>
+//               </TouchableOpacity> */}
+//             </View>
+//           )}
+//         </View>
 
-        {/* ========================================================= */}
-        {/* ATTENDANCE HISTORY SECTION                                */}
-        {/* ========================================================= */}
-        <Text className="text-xs font-black text-gray-500 dark:text-gray-400 mb-3">
-          سجل الحضور السابق
-        </Text>
+//         {/* ========================================================= */}
+//         {/* ATTENDANCE HISTORY SECTION                                */}
+//         {/* ========================================================= */}
+//         <Text className="text-xs font-black text-gray-500 dark:text-gray-400 mb-3">
+//           سجل الحضور السابق
+//         </Text>
 
-        <View className="flex-row gap-2 mb-4">
-          {[
-            { id: "all", label: "الكل" },
-            { id: "day", label: "شفت نهار ☀️" },
-            { id: "night", label: "شفت ليل 🌙" },
-          ].map((item) => (
-            <TouchableOpacity
-              key={item.id}
-              onPress={() => setSelectedShift(item.id)}
-              style={{
-                backgroundColor: selectedShift === item.id ? "#C09A3E" : undefined,
-              }}
-              className={`px-4 py-2 rounded-xl border ${
-                selectedShift === item.id
-                  ? "border-[#C09A3E]"
-                  : "bg-gray-200 dark:bg-white/5 border-gray-300 dark:border-white/10"
-              }`}
-            >
-              <Text
-                style={{
-                  color: selectedShift === item.id ? "#000000" : undefined,
-                }}
-                className={`text-xs font-bold ${
-                  selectedShift === item.id
-                    ? ""
-                    : "text-gray-700 dark:text-gray-300"
-                }`}
-              >
-                {item.label}
-              </Text>
-            </TouchableOpacity>
-          ))}
-        </View>
+//         <View className="flex-row gap-2 mb-4">
+//           {[
+//             { id: "all", label: "الكل" },
+//             { id: "day", label: "شفت نهار ☀️" },
+//             { id: "night", label: "شفت ليل 🌙" },
+//           ].map((item) => (
+//             <TouchableOpacity
+//               key={item.id}
+//               onPress={() => setSelectedShift(item.id)}
+//               style={{
+//                 backgroundColor: selectedShift === item.id ? "#C09A3E" : undefined,
+//               }}
+//               className={`px-4 py-2 rounded-xl border ${
+//                 selectedShift === item.id
+//                   ? "border-[#C09A3E]"
+//                   : "bg-gray-200 dark:bg-white/5 border-gray-300 dark:border-white/10"
+//               }`}
+//             >
+//               <Text
+//                 style={{
+//                   color: selectedShift === item.id ? "#000000" : undefined,
+//                 }}
+//                 className={`text-xs font-bold ${
+//                   selectedShift === item.id
+//                     ? ""
+//                     : "text-gray-700 dark:text-gray-300"
+//                 }`}
+//               >
+//                 {item.label}
+//               </Text>
+//             </TouchableOpacity>
+//           ))}
+//         </View>
 
-        {loading ? (
-          <View className="py-20 items-center justify-center">
-            <ActivityIndicator size="large" color="#C09A3E" />
-            <Text className="text-gray-500 dark:text-gray-400 mt-3 text-xs">
-              جاري تحميل السجل...
-            </Text>
-          </View>
-        ) : error ? (
-          <View className="py-10 items-center justify-center">
-            <Text className="text-red-500 text-sm font-bold">{error}</Text>
-          </View>
-        ) : filteredHistory.length === 0 ? (
-          <View className="py-10 items-center justify-center">
-            <Text className="text-gray-500 dark:text-gray-400 text-sm">
-              لا يوجد سجلات دوام مطابقة.
-            </Text>
-          </View>
-        ) : (
-          filteredHistory.map((item) => (
-            <View
-              key={item.id}
-              className="bg-white dark:bg-[#1A1A1A] border border-gray-200 dark:border-white/10 rounded-2xl p-4 mb-3 shadow-sm dark:shadow-none"
-            >
-              <View className="flex-row items-center justify-between border-b border-gray-100 dark:border-white/5 pb-2 mb-3">
-                <Text className="text-gray-900 dark:text-white font-extrabold text-sm">
-                  {item.date_formatted}
-                </Text>
-                <View
-                  className={`px-3 py-1 rounded-full ${
-                    item.status_class === "absent" ||
-                    item.status_class === "rejected"
-                      ? "bg-red-500/10 border border-red-500/30"
-                      : item.status_class === "pending"
-                      ? "bg-amber-500/10 border border-amber-500/30"
-                      : "bg-emerald-500/10 border border-emerald-500/30"
-                  }`}
-                >
-                  <Text
-                    className={`text-xs font-bold ${
-                      item.status_class === "absent" ||
-                      item.status_class === "rejected"
-                        ? "text-red-500 dark:text-red-400"
-                        : item.status_class === "pending"
-                        ? "text-amber-600 dark:text-amber-400"
-                        : "text-emerald-600 dark:text-emerald-400"
-                    }`}
-                  >
-                    {item.status}
-                  </Text>
-                </View>
-              </View>
+//         {loading ? (
+//           <View className="py-20 items-center justify-center">
+//             <ActivityIndicator size="large" color="#C09A3E" />
+//             <Text className="text-gray-500 dark:text-gray-400 mt-3 text-xs">
+//               جاري تحميل السجل...
+//             </Text>
+//           </View>
+//         ) : error ? (
+//           <View className="py-10 items-center justify-center">
+//             <Text className="text-red-500 text-sm font-bold">{error}</Text>
+//           </View>
+//         ) : filteredHistory.length === 0 ? (
+//           <View className="py-10 items-center justify-center">
+//             <Text className="text-gray-500 dark:text-gray-400 text-sm">
+//               لا يوجد سجلات دوام مطابقة.
+//             </Text>
+//           </View>
+//         ) : (
+//           filteredHistory.map((item) => (
+//             <View
+//               key={item.id}
+//               className="bg-white dark:bg-[#1A1A1A] border border-gray-200 dark:border-white/10 rounded-2xl p-4 mb-3 shadow-sm dark:shadow-none"
+//             >
+//               <View className="flex-row items-center justify-between border-b border-gray-100 dark:border-white/5 pb-2 mb-3">
+//                 <Text className="text-gray-900 dark:text-white font-extrabold text-sm">
+//                   {item.date_formatted}
+//                 </Text>
+//                 <View
+//                   className={`px-3 py-1 rounded-full ${
+//                     item.status_class === "absent" ||
+//                     item.status_class === "rejected"
+//                       ? "bg-red-500/10 border border-red-500/30"
+//                       : item.status_class === "pending"
+//                       ? "bg-amber-500/10 border border-amber-500/30"
+//                       : "bg-emerald-500/10 border border-emerald-500/30"
+//                   }`}
+//                 >
+//                   <Text
+//                     className={`text-xs font-bold ${
+//                       item.status_class === "absent" ||
+//                       item.status_class === "rejected"
+//                         ? "text-red-500 dark:text-red-400"
+//                         : item.status_class === "pending"
+//                         ? "text-amber-600 dark:text-amber-400"
+//                         : "text-emerald-600 dark:text-emerald-400"
+//                     }`}
+//                   >
+//                     {item.status}
+//                   </Text>
+//                 </View>
+//               </View>
 
-              <View className="flex-row justify-between">
-                <Text className="text-gray-500 dark:text-gray-400 text-xs">
-                  نوع الدوام:{" "}
-                  <Text className="text-gray-800 dark:text-gray-200 font-bold">
-                    {item.shift_type}
-                  </Text>
-                </Text>
+//               <View className="flex-row justify-between">
+//                 <Text className="text-gray-500 dark:text-gray-400 text-xs">
+//                   نوع الدوام:{" "}
+//                   <Text className="text-gray-800 dark:text-gray-200 font-bold">
+//                     {item.shift_type}
+//                   </Text>
+//                 </Text>
 
-                <Text className="text-gray-500 dark:text-gray-400 text-xs">
-                  ساعات الأساسي:{" "}
-                  <Text className="text-gray-800 dark:text-gray-200 font-bold">
-                    {item.base_hours} ساعة
-                  </Text>
-                </Text>
+//                 <Text className="text-gray-500 dark:text-gray-400 text-xs">
+//                   ساعات الأساسي:{" "}
+//                   <Text className="text-gray-800 dark:text-gray-200 font-bold">
+//                     {item.base_hours} ساعة
+//                   </Text>
+//                 </Text>
 
-                <Text className="text-[#C09A3E] text-xs font-bold">
-                  {item.overtime_hours > 0
-                    ? `${item.overtime_hours} ساعة إضافي`
-                    : "بدون إضافي"}
-                </Text>
-              </View>
-            </View>
-          ))
-        )}
-      </ScrollView>
-    </SafeAreaView>
-  );
-}
+//                 <Text className="text-[#C09A3E] text-xs font-bold">
+//                   {item.overtime_hours > 0
+//                     ? `${item.overtime_hours} ساعة إضافي`
+//                     : "بدون إضافي"}
+//                 </Text>
+//               </View>
+//             </View>
+//           ))
+//         )}
+//       </ScrollView>
+//     </SafeAreaView>
+//   );
+// }
+
+
+
+
+
