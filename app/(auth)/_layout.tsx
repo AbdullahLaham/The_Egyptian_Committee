@@ -71,13 +71,17 @@
 
 import { Stack, router } from "expo-router";
 import { useEffect, useState } from "react";
-import { View, ActivityIndicator } from "react-native";
+import { View, ActivityIndicator, BackHandler } from "react-native";
 import { checkAuth } from "@/lib/check-auth";
 
 export default function AuthLayout() {
   const [checking, setChecking] = useState(true);
 
   useEffect(() => {
+    // Intercept Android hardware back button
+    const backHandler = BackHandler.addEventListener("hardwareBackPress", () => {
+      return true; // Disables back navigation
+    });
     const verify = async () => {
       try {
         setChecking(true);

@@ -173,3 +173,27 @@ export async function syncFcmTokenWithBackend(fcmToken: string): Promise<void> {
     console.log("Failed to sync FCM token with backend:", error);
   }
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+// npx expo install @expo/vector-icons @hookform/resolvers @react-native-async-storage/async-storage @react-native-community/netinfo  @react-navigation/bottom-tabs @react-navigation/drawer @react-navigation/elements @react-navigation/native @tanstack/react-query axios expo-av expo-blur expo-build-properties expo-clipboard expo-dev-client expo-file-system expo-haptics expo-image-manipulator expo-image-picker expo-linear-gradient expo-location expo-notifications expo-secure-store expo-sqlite lucide-react-native react-hook-form react-native-device-info react-native-keyboard-aware-scroll-view react-native-mmkv react-native-modal use-debounce zod zustand
+
+
+
+// eas build --platform android --profile production

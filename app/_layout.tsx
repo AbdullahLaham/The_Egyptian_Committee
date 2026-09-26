@@ -1,9 +1,9 @@
 
 import { useEffect, useRef } from "react";
-import { Platform, I18nManager } from "react-native";
+import { Platform, I18nManager, View, ActivityIndicator } from "react-native";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
 import { Drawer } from "expo-router/drawer";
-import { router, useRootNavigationState } from "expo-router";
+import { router, Stack, useRootNavigationState } from "expo-router";
 import { Ionicons } from "@expo/vector-icons";
 import * as Notifications from "expo-notifications";
 
@@ -122,6 +122,30 @@ export default function RootLayout() {
       unsubscribeOnOpen();
     };
   }, [navState?.key]);
+
+
+
+  // 2. Prevent premature rendering before navigation and initial auth checks finish
+  // if (loading || !navState?.key) {
+  //   return (
+  //     <View style={{ flex: 1, justifyContent: "center", alignItems: "center", backgroundColor: "#0F0F0F" }}>
+  //       <ActivityIndicator size="large" color="#C09A3E" />
+  //     </View>
+  //   );
+  // }
+
+  // 3. UNAUTHENTICATED STATE: Render Stack strictly containing Auth screens
+  if (!user) {
+    return (
+      <ThemeProvider>
+        <GestureHandlerRootView style={{ flex: 1 }}>
+          <Stack screenOptions={{ headerShown: false }}>
+            <Stack.Screen name="(auth)" />
+          </Stack>
+        </GestureHandlerRootView>
+      </ThemeProvider>
+    );
+  }
 
   return (
     <ThemeProvider>
