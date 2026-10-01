@@ -267,7 +267,7 @@ export const AttendanceForm: React.FC<AttendanceFormProps> = ({
         >
           <Ionicons name="location-sharp" size={20} color="#FFFFFF" />
           <Text className="text-white font-black text-sm">
-            إرسال موقع الحضور الآن
+           تأكيد الحضور الآن
           </Text>
         </TouchableOpacity>
       )}

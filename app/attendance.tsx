@@ -895,6 +895,8 @@ export default function AttendanceScreen() {
       );
       const data = response?.data;
 
+      console.log(data, 'ttttttttttttttttttttttttttttttttttt')
+
       if (data && Array.isArray(data.history)) {
         setHistory((prevHistory) => {
           if (pageNumber === 1 || isRefresh) {
